@@ -13,12 +13,8 @@ def print_header(options=nil)
 end
 
 def print_body(students)
-  index = 0
-  while index < students.length
-  #students.each_with_index do |student,index|
-    student = students[index]
-    puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort)"
-    index += 1
+  students.each_with_index do |student,index|
+    puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort, loves #{student[:hobbies]})"
   end
 end
 
@@ -104,25 +100,25 @@ def input_students
   students
 end
 
-=begin
+#=begin
 #Using harcoded values for unit testing to save inputting time
 students = [
-  {name: "Dr. Ella Turner", cohort: :november},
-  {name: "Amelia Walsh", cohort: :november},
-  {name: "Mrs. Lisa Davidson", cohort: :november},
-  {name: "Edward Turner", cohort: :november},
-  {name: "Karen Davidson", cohort: :november},
-  {name: "Mr. Jan Hamilton", cohort: :november},
-  {name: "Deirdre Oliver", cohort: :november},
-  {name: "Vanessa Sanderson", cohort: :november},
-  {name: "Ms. Diane Newman", cohort: :november},
-  {name: "Mrs. Sue Mackenzie", cohort: :november},
-  {name: "Mr. Gordon Morrison", cohort: :november},
-  {name: "Max Martin", cohort: :november}
+  {name: "Dr. Ella Turner", cohort: :november, hobbies: "Hiking"},
+  {name: "Amelia Walsh", cohort: :november, hobbies: "Sewing"},
+  {name: "Mrs. Lisa Davidson", cohort: :november, hobbies: "Knitting"},
+  {name: "Edward Turner", cohort: :november, hobbies: "Photography"},
+  {name: "Karen Davidson", cohort: :november, hobbies: "Scuba Diving"},
+  {name: "Mr. Jan Hamilton", cohort: :november, hobbies: "Camping"},
+  {name: "Deirdre Oliver", cohort: :november, hobbies: "Drawing"},
+  {name: "Vanessa Sanderson", cohort: :november, hobbies: "Dancing"},
+  {name: "Ms. Diane Newman", cohort: :november, hobbies: "Stamp Collecting"},
+  {name: "Mrs. Sue Mackenzie", cohort: :november, hobbies: "Origami"},
+  {name: "Mr. Gordon Morrison", cohort: :november, hobbies: "Cooking"},
+  {name: "Max Martin", cohort: :november, hobbies: "Writing"}
 ]
-=end
+#=end
 
-students = input_students
+#students = input_students
 
 while true
   print_option = print_menu
