@@ -1,23 +1,20 @@
 CUSTOM_MESSAGE = {
   :print_all => nil,
-  :firstname_first_char => " with your chosen alphabet"
+  :firstname_first_char => " filtered by first name's first letter"
 }
 
-#Unit tested print_header; working.
 def print_header(options=nil)
   options ||= :print_all
   puts "The students of Villains Academy#{CUSTOM_MESSAGE[options]}"
   puts "----------------"
 end
 
-#Unit tested print body; working.
 def print_body(students)
   students.each_with_index do |student,index|
     puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort)"
   end
 end
 
-#Unit tested print_footer; working
 def print_footer(count,options=nil)
   options ||= :print_all
   puts "Overall, we have #{count} great students#{CUSTOM_MESSAGE[options]}"
@@ -28,36 +25,45 @@ def print_students(students,options=nil)
 
   case options
   when :print_all
-    print_header(options)
-    print_body(students)
-    print_footer(students.count,options)
+    #Nothing to do, but added for maintainability
   when :firstname_first_char
-    print_header(options)
     students = select_firstname_first_char(students)
-    print_body(students)
-    print_footer(students.count,options)
   else
     puts "Invalid print option."
   end
+  print_header(options)
+  print_body(students)
+  print_footer(students.count,options)
 end
 
-#Unit tested print_menu; working.
 def print_menu
-  options = [nil,:print_all,:firstname_first_char]
+  options = [nil,:print_all,:firstname_first_char,:exit]
   puts "Print Options"
   puts "-------------"
   puts "1. All Students"
-  puts "2. Filtered by First Alphabet of First Name"
-  print "Enter your choice 1/2: "
+  puts "2. Filtered by First Name's First Letter"
+  puts "3. Exit"
+  print "Enter your choice [1-3]: "
   options[gets.chomp.to_i]
 end
 
 def select_firstname_first_char(students)
-  #To be coded. For now returning all students.
-  students
+  titles = ["Mr", "Mrs", "Ms", "Dr"]
+  selected_students = []
+
+  print "Enter the alphabet [A-Z|a-z]: "
+  first_char = gets.chomp.upcase
+
+  students.each do |student|
+    split_name = student[:name].split(/[ \.]/).reject {|word| word == ""}
+    first_name = titles.include?(split_name[0]) ? split_name[1] : split_name[0]
+    if first_name[0].upcase == first_char
+      selected_students << student
+    end
+  end
+  selected_students
 end
 
-#Unchanged baseline code for input_students; not unit tested again
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit enter twice"
@@ -72,21 +78,27 @@ def input_students
   students
 end
 
-#Using harcoded values until each new method has been unit tested to save inputting time
+=begin
+#Using harcoded values for unit testing to save inputting time
 students = [
-  {name: "Dr. Hannibal Lecter", cohort: :november},
-  {name: "Darth Vader", cohort: :november},
-  {name: "Nurse Ratched", cohort: :november},
-  {name: "Michael Corleone", cohort: :november},
-  {name: "Alex DeLarge", cohort: :november},
-  {name: "The Wicked Witch of the West", cohort: :november},
-  {name: "Terminator", cohort: :november},
-  {name: "Freddy Krueger", cohort: :november},
-  {name: "The Joker", cohort: :november},
-  {name: "Joffrey Baratheon", cohort: :november},
-  {name: "Norman Bates", cohort: :november}
+  {name: "Dr. Ella Turner", cohort: :november},
+  {name: "Amelia Walsh", cohort: :november},
+  {name: "Mrs. Lisa Davidson", cohort: :november},
+  {name: "Edward Turner", cohort: :november},
+  {name: "Karen Davidson", cohort: :november},
+  {name: "Mr. Jan Hamilton", cohort: :november},
+  {name: "Deirdre Oliver", cohort: :november},
+  {name: "Vanessa Sanderson", cohort: :november},
+  {name: "Ms. Diane Newman", cohort: :november},
+  {name: "Mrs. Sue Mackenzie", cohort: :november},
+  {name: "Mr. Gordon Morrison", cohort: :november}
 ]
-#students = input_students
+=end
 
-print_option = print_menu
-print_students(students,print_option)
+students = input_students
+
+while true
+  print_option = print_menu
+  break if print_option == :exit
+  print_students(students,print_option)
+end
