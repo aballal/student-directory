@@ -1,10 +1,13 @@
+#Add a message for each new print option
 CUSTOM_MESSAGE = {
   :print_all => nil,
-  :firstname_first_char => " filtered by first name's first letter"
+  :firstname_first_char => " filtered by first name's first letter",
+  :name_less_than_12 => " filtered by names lesser than length 12"
 }
 
 def print_header(options=nil)
   options ||= :print_all
+  puts ""
   puts "The students of Villains Academy#{CUSTOM_MESSAGE[options]}"
   puts "----------------"
 end
@@ -18,16 +21,20 @@ end
 def print_footer(count,options=nil)
   options ||= :print_all
   puts "Overall, we have #{count} great students#{CUSTOM_MESSAGE[options]}"
+  puts ""
 end
 
+#Add a case when for each new print option
 def print_students(students,options=nil)
   options ||= :print_all
 
   case options
   when :print_all
-    #Nothing to do, but added for maintainability
+    #Nothing to do
   when :firstname_first_char
     students = select_firstname_first_char(students)
+  when :name_less_than_12
+    students = select_names_less_than_12(students)
   else
     puts "Invalid print option."
   end
@@ -36,14 +43,17 @@ def print_students(students,options=nil)
   print_footer(students.count,options)
 end
 
+#Add an array element and puts statement, update valid input range, for each new print option
 def print_menu
-  options = [nil,:print_all,:firstname_first_char,:exit]
+  options = [nil,:print_all,:firstname_first_char,:name_less_than_12,:exit]
+  puts ""
   puts "Print Options"
   puts "-------------"
   puts "1. All Students"
   puts "2. Filtered by First Name's First Letter"
-  puts "3. Exit"
-  print "Enter your choice [1-3]: "
+  puts "3. Filtered by Names Lesser than Length 12"
+  puts "4. Exit"
+  print "Enter your choice [1-4]: "
   options[gets.chomp.to_i]
 end
 
@@ -58,6 +68,18 @@ def select_firstname_first_char(students)
     split_name = student[:name].split(/[ \.]/).reject {|word| word == ""}
     first_name = titles.include?(split_name[0]) ? split_name[1] : split_name[0]
     if first_name[0].upcase == first_char
+      selected_students << student
+    end
+  end
+  selected_students
+end
+
+def select_names_less_than_12(students)
+  #Length ignoring ' ' and '.'
+  selected_students = []
+  students.each do |student|
+    split_name = student[:name].split(/[ \.]/).reject {|word| word == ""}
+    if split_name.join.length < 12
       selected_students << student
     end
   end
@@ -91,7 +113,8 @@ students = [
   {name: "Vanessa Sanderson", cohort: :november},
   {name: "Ms. Diane Newman", cohort: :november},
   {name: "Mrs. Sue Mackenzie", cohort: :november},
-  {name: "Mr. Gordon Morrison", cohort: :november}
+  {name: "Mr. Gordon Morrison", cohort: :november},
+  {name: "Max Martin", cohort: :november}
 ]
 =end
 
