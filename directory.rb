@@ -17,18 +17,20 @@ end
 
 def print_body(students)
   students.each_with_index do |student,index|
-    print "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort"
-    print ", aged #{student[:age]}" unless student[:age].to_s.empty?
-    print ", from #{student[:country]}" unless student[:country].empty?
-    print ", loves #{student[:hobby]}" unless student[:hobby].empty?
-    print ")\n"
+    print "#{index+1}.".rjust(5/100.0*LINE_WIDTH)
+    print "#{student[:name]}".ljust(25/100.0*LINE_WIDTH)
+    print "#{student[:cohort]} cohort".ljust(20/100.0*LINE_WIDTH)
+    print "aged #{student[:age]}".ljust(10/100.0*LINE_WIDTH) unless student[:age].to_s.empty?
+    print "from #{student[:country]}".ljust(20/100.0*LINE_WIDTH) unless student[:country].empty?
+    print "loves #{student[:hobby]}".ljust(20/100.0*LINE_WIDTH) unless student[:hobby].empty?
+    print "\n"
   end
 end
 
 def print_footer(count,options=nil)
   options ||= :print_all
-  puts "Overall, we have #{count} great students#{CUSTOM_MESSAGE[options]}"
   puts ""
+  puts "Overall, we have #{count} great students#{CUSTOM_MESSAGE[options]}"
 end
 
 #Add a case when for each new print option
