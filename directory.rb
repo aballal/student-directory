@@ -96,19 +96,28 @@ def select_names_less_than_12(students)
 end
 
 def input_students
+  valid_cohort = [:january,:february,:march,:april,:may,:june,:july,:august,:september,:october,:november,:december]
+
   puts "Please enter the names of the students"
   puts "To finish, just hit enter twice"
 
   students = []
   name = gets.chomp
   while !name.empty?
+    while true
+      print "Cohort: "
+      cohort = gets.chomp.downcase.to_sym
+      cohort = :november if cohort.empty?
+      break if valid_cohort.include?(cohort)
+      puts "Invalid cohort. Enter a month in full."
+    end
     print "Hobby: "
     hobby = gets.chomp
     print "Age: "
     age = gets.chomp
     print "Country: "
     country = gets.chomp
-    students << {name: name, cohort: :november, hobby: hobby, age: age, country: country}
+    students << {name: name, cohort: cohort, hobby: hobby, age: age, country: country}
     puts "Now we have #{students.length} students"
     name = gets.chomp
   end
