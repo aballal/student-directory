@@ -14,7 +14,7 @@ end
 
 def print_body(students)
   students.each_with_index do |student,index|
-    puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort, loves #{student[:hobbies]})"
+    puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort, aged #{student[:age]}, from #{student[:country]}, loves #{student[:hobbies]})"
   end
 end
 
@@ -103,18 +103,18 @@ end
 #=begin
 #Using harcoded values for unit testing to save inputting time
 students = [
-  {name: "Dr. Ella Turner", cohort: :november, hobbies: "Hiking"},
-  {name: "Amelia Walsh", cohort: :november, hobbies: "Sewing"},
-  {name: "Mrs. Lisa Davidson", cohort: :november, hobbies: "Knitting"},
-  {name: "Edward Turner", cohort: :november, hobbies: "Photography"},
-  {name: "Karen Davidson", cohort: :november, hobbies: "Scuba Diving"},
-  {name: "Mr. Jan Hamilton", cohort: :november, hobbies: "Camping"},
-  {name: "Deirdre Oliver", cohort: :november, hobbies: "Drawing"},
-  {name: "Vanessa Sanderson", cohort: :november, hobbies: "Dancing"},
-  {name: "Ms. Diane Newman", cohort: :november, hobbies: "Stamp Collecting"},
-  {name: "Mrs. Sue Mackenzie", cohort: :november, hobbies: "Origami"},
-  {name: "Mr. Gordon Morrison", cohort: :november, hobbies: "Cooking"},
-  {name: "Max Martin", cohort: :november, hobbies: "Writing"}
+  {name: "Dr. Ella Turner", cohort: :november, hobbies: "Hiking", age: 35,country: "England"},
+  {name: "Amelia Walsh", cohort: :november, hobbies: "Sewing", age: 23,country: "Wales"},
+  {name: "Mrs. Lisa Davidson", cohort: :november, hobbies: "Knitting", age: 60,country: "England"},
+  {name: "Edward Turner", cohort: :november, hobbies: "Photography", age: 40,country: "England"},
+  {name: "Karen Davidson", cohort: :november, hobbies: "Scuba Diving", age: 30,country: "England"},
+  {name: "Mr. Jan Hamilton", cohort: :november, hobbies: "Camping", age: 45,country: "Scotland"},
+  {name: "Deirdre Oliver", cohort: :november, hobbies: "Drawing", age: 22,country: "Ireland"},
+  {name: "Vanessa Sanderson", cohort: :november, hobbies: "Dancing", age: 18,country: "USA"},
+  {name: "Ms. Diane Newman", cohort: :november, hobbies: "Stamp Collecting", age: 25,country: "France"},
+  {name: "Mrs. Sue Mackenzie", cohort: :november, hobbies: "Origami", age: 70,country: "England"},
+  {name: "Mr. Gordon Morrison", cohort: :november, hobbies: "Cooking", age: 51,country: "England"},
+  {name: "Max Martin", cohort: :november, hobbies: "Writing", age: 33,country: "Scotland"}
 ]
 #=end
 
