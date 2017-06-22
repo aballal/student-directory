@@ -32,7 +32,7 @@ end
 def print_footer(count,options=nil)
   options ||= :print_all
   puts ""
-  puts "Overall, we have #{count} great students#{CUSTOM_MESSAGE[options]}"
+  puts "Overall, we have #{count} great student#{count == 1 ? "" : "s"}#{CUSTOM_MESSAGE[options]}"
 end
 
 #Add a case when for each new print option
@@ -118,7 +118,7 @@ def input_students
     print "Country: "
     country = gets.chomp
     students << {name: name, cohort: cohort, hobby: hobby, age: age, country: country}
-    puts "Now we have #{students.length} students"
+    puts "Now we have #{students.length} student#{students.length == 1 ? "" : "s"}"
     name = gets.chomp
   end
   students
