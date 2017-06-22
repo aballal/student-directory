@@ -7,6 +7,8 @@ CUSTOM_MESSAGE = {
 
 LINE_WIDTH = 100
 
+COHORT_LIST = [:january,:february,:march,:april,:may,:june,:july,:august,:september,:october,:november,:december]
+
 def print_header(options=nil)
   options ||= :print_all
   puts ""
@@ -39,7 +41,7 @@ def print_students(students,options=nil)
 
   case options
   when :print_all
-    #Nothing to do
+    students = students.sort_by {|student| COHORT_LIST.index(student[:cohort])}
   when :firstname_first_char
     students = select_firstname_first_char(students)
   when :name_less_than_12
@@ -96,8 +98,6 @@ def select_names_less_than_12(students)
 end
 
 def input_students
-  valid_cohort = [:january,:february,:march,:april,:may,:june,:july,:august,:september,:october,:november,:december]
-
   puts "Please enter the names of the students"
   puts "To finish, just hit enter twice"
 
@@ -108,7 +108,7 @@ def input_students
       print "Cohort: "
       cohort = gets.chomp.downcase.to_sym
       cohort = :november if cohort.empty?
-      break if valid_cohort.include?(cohort)
+      break if COHORT_LIST.include?(cohort)
       puts "Invalid cohort. Enter a month in full."
     end
     print "Hobby: "
@@ -129,15 +129,15 @@ end
 students = [
   {name: "Dr. Ella Turner", cohort: :november, hobby: "Hiking", age: 35,country: "England"},
   {name: "Amelia Walsh", cohort: :november, hobby: "Sewing", age: 23,country: "Wales"},
-  {name: "Mrs. Lisa Davidson", cohort: :november, hobby: "Knitting", age: 60,country: "England"},
-  {name: "Edward Turner", cohort: :november, hobby: "Photography", age: 40,country: "England"},
-  {name: "Karen Davidson", cohort: :november, hobby: "Scuba Diving", age: 30,country: "England"},
-  {name: "Mr. Jan Hamilton", cohort: :november, hobby: "Camping", age: 45,country: "Scotland"},
-  {name: "Deirdre Oliver", cohort: :november, hobby: "Drawing", age: 22,country: "Ireland"},
+  {name: "Mrs. Lisa Davidson", cohort: :may, hobby: "Knitting", age: 60,country: "England"},
+  {name: "Edward Turner", cohort: :july, hobby: "Photography", age: 40,country: "England"},
+  {name: "Karen Davidson", cohort: :january, hobby: "Scuba Diving", age: 30,country: "England"},
+  {name: "Mr. Jan Hamilton", cohort: :december, hobby: "Camping", age: 45,country: "Scotland"},
+  {name: "Deirdre Oliver", cohort: :july, hobby: "Drawing", age: 22,country: "Ireland"},
   {name: "Vanessa Sanderson", cohort: :november, hobby: "Dancing", age: 18,country: "USA"},
-  {name: "Ms. Diane Newman", cohort: :november, hobby: "Stamp Collecting", age: 25,country: "France"},
-  {name: "Mrs. Sue Mackenzie", cohort: :november, hobby: "Origami", age: 70,country: "England"},
-  {name: "Mr. Gordon Morrison", cohort: :november, hobby: "Cooking", age: 51,country: "England"},
+  {name: "Ms. Diane Newman", cohort: :april, hobby: "Stamp Collecting", age: 25,country: "France"},
+  {name: "Mrs. Sue Mackenzie", cohort: :february, hobby: "Origami", age: 70,country: "England"},
+  {name: "Mr. Gordon Morrison", cohort: :march, hobby: "Cooking", age: 51,country: "England"},
   {name: "Max Martin", cohort: :november, hobby: "Writing", age: 33,country: "Scotland"}
 ]
 =end
