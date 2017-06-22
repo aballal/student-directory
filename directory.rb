@@ -5,16 +5,23 @@ CUSTOM_MESSAGE = {
   :name_less_than_12 => " filtered by names lesser than length 12"
 }
 
+LINE_WIDTH = 100
+
 def print_header(options=nil)
   options ||= :print_all
   puts ""
-  puts "The students of Villains Academy#{CUSTOM_MESSAGE[options]}"
-  puts "----------------"
+  puts "Students of Villains Academy".center(LINE_WIDTH)
+  puts "(#{CUSTOM_MESSAGE[options]} )".center(LINE_WIDTH) unless CUSTOM_MESSAGE[options].to_s.empty?
+  puts "#{'-'*LINE_WIDTH}"
 end
 
 def print_body(students)
   students.each_with_index do |student,index|
-    puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort, aged #{student[:age]}, from #{student[:country]}, loves #{student[:hobbies]})"
+    print "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort"
+    print ", aged #{student[:age]}" unless student[:age].to_s.empty?
+    print ", from #{student[:country]}" unless student[:country].empty?
+    print ", loves #{student[:hobby]}" unless student[:hobby].empty?
+    print ")\n"
   end
 end
 
@@ -93,32 +100,38 @@ def input_students
   students = []
   name = gets.chomp
   while !name.empty?
-    students << {name: name, cohort: :november}
+    print "Hobby: "
+    hobby = gets.chomp
+    print "Age: "
+    age = gets.chomp
+    print "Country: "
+    country = gets.chomp
+    students << {name: name, cohort: :november, hobby: hobby, age: age, country: country}
     puts "Now we have #{students.length} students"
     name = gets.chomp
   end
   students
 end
 
-#=begin
+=begin
 #Using harcoded values for unit testing to save inputting time
 students = [
-  {name: "Dr. Ella Turner", cohort: :november, hobbies: "Hiking", age: 35,country: "England"},
-  {name: "Amelia Walsh", cohort: :november, hobbies: "Sewing", age: 23,country: "Wales"},
-  {name: "Mrs. Lisa Davidson", cohort: :november, hobbies: "Knitting", age: 60,country: "England"},
-  {name: "Edward Turner", cohort: :november, hobbies: "Photography", age: 40,country: "England"},
-  {name: "Karen Davidson", cohort: :november, hobbies: "Scuba Diving", age: 30,country: "England"},
-  {name: "Mr. Jan Hamilton", cohort: :november, hobbies: "Camping", age: 45,country: "Scotland"},
-  {name: "Deirdre Oliver", cohort: :november, hobbies: "Drawing", age: 22,country: "Ireland"},
-  {name: "Vanessa Sanderson", cohort: :november, hobbies: "Dancing", age: 18,country: "USA"},
-  {name: "Ms. Diane Newman", cohort: :november, hobbies: "Stamp Collecting", age: 25,country: "France"},
-  {name: "Mrs. Sue Mackenzie", cohort: :november, hobbies: "Origami", age: 70,country: "England"},
-  {name: "Mr. Gordon Morrison", cohort: :november, hobbies: "Cooking", age: 51,country: "England"},
-  {name: "Max Martin", cohort: :november, hobbies: "Writing", age: 33,country: "Scotland"}
+  {name: "Dr. Ella Turner", cohort: :november, hobby: "Hiking", age: 35,country: "England"},
+  {name: "Amelia Walsh", cohort: :november, hobby: "Sewing", age: 23,country: "Wales"},
+  {name: "Mrs. Lisa Davidson", cohort: :november, hobby: "Knitting", age: 60,country: "England"},
+  {name: "Edward Turner", cohort: :november, hobby: "Photography", age: 40,country: "England"},
+  {name: "Karen Davidson", cohort: :november, hobby: "Scuba Diving", age: 30,country: "England"},
+  {name: "Mr. Jan Hamilton", cohort: :november, hobby: "Camping", age: 45,country: "Scotland"},
+  {name: "Deirdre Oliver", cohort: :november, hobby: "Drawing", age: 22,country: "Ireland"},
+  {name: "Vanessa Sanderson", cohort: :november, hobby: "Dancing", age: 18,country: "USA"},
+  {name: "Ms. Diane Newman", cohort: :november, hobby: "Stamp Collecting", age: 25,country: "France"},
+  {name: "Mrs. Sue Mackenzie", cohort: :november, hobby: "Origami", age: 70,country: "England"},
+  {name: "Mr. Gordon Morrison", cohort: :november, hobby: "Cooking", age: 51,country: "England"},
+  {name: "Max Martin", cohort: :november, hobby: "Writing", age: 33,country: "Scotland"}
 ]
-#=end
+=end
 
-#students = input_students
+students = input_students
 
 while true
   print_option = print_menu
