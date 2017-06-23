@@ -37,6 +37,8 @@ def process_students(students,option)
       print_body(students)
       print_footer(students.count)
     end
+  when :save
+    save_students(students)
   else
     puts "Invalid selection, try again."
   end
@@ -44,12 +46,13 @@ def process_students(students,option)
 end
 
 def print_menu
-  option = [nil,:input,:display_all,nil,nil,nil,nil,nil,nil,:exit]
+  option = [nil,:input,:display_all,:save,nil,nil,nil,nil,nil,:exit]
   puts ""
   puts "Menu".center(LINE_WIDTH/4)
   puts "#{"-" * (LINE_WIDTH/4)}"
   puts "1. Input Students"
   puts "2. Display Students"
+  puts "3. Save Students to File"
   puts "9. Exit"
   print "Enter your choice [1-2,9]: "
   option[gets.chomp.to_i]
@@ -79,6 +82,12 @@ def input_students(students)
     name = gets.chomp
   end
   students
+end
+
+def save_students(students)
+  file = File.open("students.csv","w")
+  students.each { |student| file.puts [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]].join(",")}
+  file.close
 end
 
 =begin
