@@ -39,6 +39,8 @@ def process_students(students,option)
     end
   when :save
     save_students(students)
+  when :load
+    students = load_students(students)
   else
     puts "Invalid selection, try again."
   end
@@ -46,13 +48,14 @@ def process_students(students,option)
 end
 
 def print_menu
-  option = [nil,:input,:display_all,:save,nil,nil,nil,nil,nil,:exit]
+  option = [nil,:input,:display_all,:save,:load,nil,nil,nil,nil,:exit]
   puts ""
   puts "Menu".center(LINE_WIDTH/4)
   puts "#{"-" * (LINE_WIDTH/4)}"
   puts "1. Input Students"
   puts "2. Display Students"
   puts "3. Save Students to File"
+  puts "4. Load Students from File"
   puts "9. Exit"
   print "Enter your choice [1-2,9]: "
   option[gets.chomp.to_i]
@@ -71,13 +74,13 @@ def input_students(students)
       break if COHORT_LIST.include?(cohort)
       puts "Invalid cohort. Enter a month in full."
     end
-    print "Hobby: "
-    hobby = gets.chomp
     print "Age: "
     age = gets.chomp
     print "Country: "
     country = gets.chomp
-    students << {name: name, cohort: cohort, hobby: hobby, age: age, country: country}
+    print "Hobby: "
+    hobby = gets.chomp
+    students << {name: name, cohort: cohort, age: age, country: country, hobby: hobby}
     puts "Now we have #{students.length} student#{students.length == 1 ? "" : "s"}"
     name = gets.chomp
   end
@@ -90,21 +93,31 @@ def save_students(students)
   file.close
 end
 
+def load_students(students)
+  file = File.open("students.csv","r")
+  file.readlines.each do |line|
+    name, cohort, age, country, hobby = line.chomp.split(",")
+    students << {name: name, cohort: cohort.to_sym, age: age, country: country, hobby: hobby}
+  end
+  file.close
+  students
+end
+
 =begin
 #Using harcoded values for unit testing to save inputting time
 students = [
-  {name: "Dr. Ella Turner", cohort: :november, hobby: "Hiking", age: 35,country: "England"},
-  {name: "Amelia Walsh", cohort: :november, hobby: "Sewing", age: 23,country: "Wales"},
-  {name: "Mrs. Lisa Davidson", cohort: :may, hobby: "Knitting", age: 60,country: "England"},
-  {name: "Edward Turner", cohort: :july, hobby: "Photography", age: 40,country: "England"},
-  {name: "Karen Davidson", cohort: :january, hobby: "Scuba Diving", age: 30,country: "England"},
-  {name: "Mr. Jan Hamilton", cohort: :december, hobby: "Camping", age: 45,country: "Scotland"},
-  {name: "Deirdre Oliver", cohort: :july, hobby: "Drawing", age: 22,country: "Ireland"},
-  {name: "Vanessa Sanderson", cohort: :november, hobby: "Dancing", age: 18,country: "USA"},
-  {name: "Ms. Diane Newman", cohort: :april, hobby: "Stamp Collecting", age: 25,country: "France"},
-  {name: "Mrs. Sue Mackenzie", cohort: :february, hobby: "Origami", age: 70,country: "England"},
-  {name: "Mr. Gordon Morrison", cohort: :march, hobby: "Cooking", age: 51,country: "England"},
-  {name: "Max Martin", cohort: :november, hobby: "Writing", age: 33,country: "Scotland"}
+  {name: "Dr. Ella Turner", cohort: :november, age: 35,country: "England", hobby: "Hiking"},
+  {name: "Amelia Walsh", cohort: :november, age: 23,country: "Wales", hobby: "Sewing"},
+  {name: "Mrs. Lisa Davidson", cohort: :may, age: 60,country: "England", hobby: "Knitting"},
+  {name: "Edward Turner", cohort: :july, age: 40,country: "England", hobby: "Photography"},
+  {name: "Karen Davidson", cohort: :january, age: 30,country: "England", hobby: "Scuba Diving"},
+  {name: "Mr. Jan Hamilton", cohort: :december, age: 45,country: "Scotland", hobby: "Camping"},
+  {name: "Deirdre Oliver", cohort: :july, age: 22,country: "Ireland", hobby: "Drawing"},
+  {name: "Vanessa Sanderson", cohort: :november, age: 18,country: "USA", hobby: "Dancing"},
+  {name: "Ms. Diane Newman", cohort: :april, age: 25,country: "France", hobby: "Stamp Collecting"},
+  {name: "Mrs. Sue Mackenzie", cohort: :february, age: 70,country: "England", hobby: "Origami"},
+  {name: "Mr. Gordon Morrison", cohort: :march, age: 51,country: "England", hobby: "Cooking"},
+  {name: "Max Martin", cohort: :november, age: 33,country: "Scotland", hobby: "Writing"}
 ]
 =end
 
@@ -112,5 +125,5 @@ students = []
 loop do
   option = print_menu
   break if option == :exit
-  students = process_students(students,option)
+  students = process_students(students,option) || []
 end
