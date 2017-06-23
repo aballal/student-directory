@@ -49,9 +49,14 @@ def print_students(students,options=nil)
   else
     puts "Invalid print option."
   end
-  print_header(options)
-  print_body(students)
-  print_footer(students.count,options)
+
+  if students.empty?
+      puts "Sorry, no#{options == :print_all ? "" : " such"} students"
+  else
+    print_header(options)
+    print_body(students)
+    print_footer(students.count,options)
+  end
 end
 
 #Add an array element and puts statement, update valid input range, for each new print option
