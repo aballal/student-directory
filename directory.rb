@@ -1,19 +1,10 @@
-#Add a message for each new print option
-CUSTOM_MESSAGE = {
-  :print_all => nil,
-  :firstname_first_char => " filtered by first name's first letter",
-  :name_less_than_12 => " filtered by names lesser than length 12"
-}
-
 LINE_WIDTH = 100
 
 COHORT_LIST = [:january,:february,:march,:april,:may,:june,:july,:august,:september,:october,:november,:december]
 
-def print_header(options=nil)
-  options ||= :print_all
+def print_header
   puts ""
   puts "Students of Villains Academy".center(LINE_WIDTH)
-  puts "(#{CUSTOM_MESSAGE[options]} )".center(LINE_WIDTH) unless CUSTOM_MESSAGE[options].to_s.empty?
   puts "#{'-'*LINE_WIDTH}"
 end
 
@@ -29,84 +20,45 @@ def print_body(students)
   end
 end
 
-def print_footer(count,options=nil)
-  options ||= :print_all
+def print_footer(count)
   puts ""
-  puts "Overall, we have #{count} great student#{count == 1 ? "" : "s"}#{CUSTOM_MESSAGE[options]}"
+  puts "Overall, we have #{count} great student#{count == 1 ? "" : "s"}"
 end
 
-#Add a case when for each new print option
-def print_students(students,options=nil)
-  options ||= :print_all
-
-  case options
-  when :print_all
-    students = students.sort_by {|student| COHORT_LIST.index(student[:cohort])}
-  when :firstname_first_char
-    students = select_firstname_first_char(students)
-  when :name_less_than_12
-    students = select_names_less_than_12(students)
+def process_students(students,option)
+  case option
+  when :input
+    students = input_students(students)
+  when :display_all
+    if students.empty?
+        puts "Sorry, no students to display"
+    else
+      print_header
+      print_body(students)
+      print_footer(students.count)
+    end
   else
-    puts "Invalid print option."
+    puts "Invalid selection, try again."
   end
-
-  if students.empty?
-      puts "Sorry, no#{options == :print_all ? "" : " such"} students"
-  else
-    print_header(options)
-    print_body(students)
-    print_footer(students.count,options)
-  end
+  students
 end
 
-#Add an array element and puts statement, update valid input range, for each new print option
 def print_menu
-  options = [nil,:print_all,:firstname_first_char,:name_less_than_12,:exit]
+  option = [nil,:input,:display_all,nil,nil,nil,nil,nil,nil,:exit]
   puts ""
-  puts "Print Options"
-  puts "-------------"
-  puts "1. All Students"
-  puts "2. Filtered by First Name's First Letter"
-  puts "3. Filtered by Names Lesser than Length 12"
-  puts "4. Exit"
-  print "Enter your choice [1-4]: "
-  options[gets.chomp.to_i]
+  puts "Menu".center(LINE_WIDTH/4)
+  puts "#{"-" * (LINE_WIDTH/4)}"
+  puts "1. Input Students"
+  puts "2. Display Students"
+  puts "9. Exit"
+  print "Enter your choice [1-2,9]: "
+  option[gets.chomp.to_i]
 end
 
-def select_firstname_first_char(students)
-  titles = ["Mr", "Mrs", "Ms", "Dr"]
-  selected_students = []
-
-  print "Enter the alphabet [A-Z|a-z]: "
-  first_char = gets.chomp.upcase
-
-  students.each do |student|
-    split_name = student[:name].split(/[ \.]/).reject {|word| word == ""}
-    first_name = titles.include?(split_name[0]) ? split_name[1] : split_name[0]
-    if first_name[0].upcase == first_char
-      selected_students << student
-    end
-  end
-  selected_students
-end
-
-def select_names_less_than_12(students)
-  #Length ignoring ' ' and '.'
-  selected_students = []
-  students.each do |student|
-    split_name = student[:name].split(/[ \.]/).reject {|word| word == ""}
-    if split_name.join.length < 12
-      selected_students << student
-    end
-  end
-  selected_students
-end
-
-def input_students
+def input_students(students)
   puts "Please enter the names of the students"
   puts "To finish, just hit enter twice"
 
-  students = []
   name = gets.chomp
   while !name.empty?
     while true
@@ -147,10 +99,9 @@ students = [
 ]
 =end
 
-students = input_students
-
-while true
-  print_option = print_menu
-  break if print_option == :exit
-  print_students(students,print_option)
+students = []
+loop do
+  option = print_menu
+  break if option == :exit
+  students = process_students(students,option)
 end
