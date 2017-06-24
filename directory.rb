@@ -2,6 +2,8 @@ LINE_WIDTH = 100
 
 COHORT_LIST = [:january,:february,:march,:april,:may,:june,:july,:august,:september,:october,:november,:december]
 
+DEFAULT_FILE = "students.csv"
+
 def print_header
   puts ""
   puts "Students of Villains Academy".center(LINE_WIDTH)
@@ -87,36 +89,42 @@ def input_students(students)
     print "Hobby: "
     hobby = STDIN.gets.chomp.init_caps
     students << {name: name, cohort: cohort, age: age, country: country, hobby: hobby}
-    puts "Now we have #{students.length} student#{students.length == 1 ? "" : "s"}"
+    puts "Now we have #{students.count} student#{plural(students.count)}"
     name = STDIN.gets.chomp.init_caps
   end
   students
 end
 
-def save_students(students,filename="students.csv")
+def save_students(students,filename=DEFAULT_FILE)
   file = File.open(filename,"w")
   students.each { |student| file.puts [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]].join(",")}
   file.close
   puts "Saved #{students.count} students to #{filename}"
 end
 
-def load_students(students,filename="students.csv")
+def load_students(students,filename=DEFAULT_FILE)
   if File.exists?(filename)
     file = File.open(filename,"r")
+    prev_count = students.count
     file.readlines.each do |line|
       name, cohort, age, country, hobby = line.chomp.split(",")
       students << {name: name, cohort: cohort.to_sym, age: age, country: country, hobby: hobby}
     end
     file.close
-    puts "Loaded #{students.count} students from #{filename}"
+    file_count = students.count - prev_count
+    puts "#{prev_count == 0 ? "Loaded" : "Added"} #{file_count} student#{plural(file_count)} from #{filename}."
   else
     puts "Sorry, #{filename} does not exist"
   end
   students
 end
 
+def plural(count)
+  count == 1 ? "" : "s"
+end
+
 def try_load_students
-  filename = ARGV.first
+  filename = ARGV.first || DEFAULT_FILE
   return if filename.nil?
   load_students([],filename)
 end
