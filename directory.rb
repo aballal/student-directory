@@ -57,50 +57,60 @@ def print_menu
   puts "3. Save Students to File"
   puts "4. Load Students from File"
   puts "9. Exit"
-  print "Enter your choice [1-2,9]: "
-  option[gets.chomp.to_i]
+  print "Enter your choice [1-4,9]: "
+  option[STDIN.gets.chomp.to_i]
 end
 
 def input_students(students)
   puts "Please enter the names of the students"
   puts "To finish, just hit enter twice"
 
-  name = gets.chomp
+  name = STDIN.gets.chomp
   while !name.empty?
     while true
       print "Cohort: "
-      cohort = gets.chomp.downcase.to_sym
+      cohort = STDIN.gets.chomp.downcase.to_sym
       cohort = :november if cohort.empty?
       break if COHORT_LIST.include?(cohort)
       puts "Invalid cohort. Enter a month in full."
     end
     print "Age: "
-    age = gets.chomp
+    age = STDIN.gets.chomp
     print "Country: "
-    country = gets.chomp
+    country = STDIN.gets.chomp
     print "Hobby: "
-    hobby = gets.chomp
+    hobby = STDIN.gets.chomp
     students << {name: name, cohort: cohort, age: age, country: country, hobby: hobby}
     puts "Now we have #{students.length} student#{students.length == 1 ? "" : "s"}"
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
   students
 end
 
-def save_students(students)
-  file = File.open("students.csv","w")
+def save_students(students,filename="students.csv")
+  file = File.open(filename,"w")
   students.each { |student| file.puts [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]].join(",")}
   file.close
 end
 
-def load_students(students)
-  file = File.open("students.csv","r")
-  file.readlines.each do |line|
-    name, cohort, age, country, hobby = line.chomp.split(",")
-    students << {name: name, cohort: cohort.to_sym, age: age, country: country, hobby: hobby}
+def load_students(students,filename="students.csv")
+  if File.exists?(filename)
+    file = File.open(filename,"r")
+    file.readlines.each do |line|
+      name, cohort, age, country, hobby = line.chomp.split(",")
+      students << {name: name, cohort: cohort.to_sym, age: age, country: country, hobby: hobby}
+    end
+    file.close
+  else
+    puts "Sorry, #{filename} does not exist"
   end
-  file.close
   students
+end
+
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  load_students([],filename)
 end
 
 =begin
@@ -121,9 +131,9 @@ students = [
 ]
 =end
 
-students = []
+students = try_load_students || []
 loop do
   option = print_menu
   break if option == :exit
-  students = process_students(students,option) || []
+  students = process_students(students,option)
 end
