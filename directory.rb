@@ -121,24 +121,6 @@ def try_load_students
   load_students([],filename)
 end
 
-=begin
-#Using harcoded values for unit testing to save inputting time
-students = [
-  {name: "Dr. Ella Turner", cohort: :november, age: 35,country: "England", hobby: "Hiking"},
-  {name: "Amelia Walsh", cohort: :november, age: 23,country: "Wales", hobby: "Sewing"},
-  {name: "Mrs. Lisa Davidson", cohort: :may, age: 60,country: "England", hobby: "Knitting"},
-  {name: "Edward Turner", cohort: :july, age: 40,country: "England", hobby: "Photography"},
-  {name: "Karen Davidson", cohort: :january, age: 30,country: "England", hobby: "Scuba Diving"},
-  {name: "Mr. Jan Hamilton", cohort: :december, age: 45,country: "Scotland", hobby: "Camping"},
-  {name: "Deirdre Oliver", cohort: :july, age: 22,country: "Ireland", hobby: "Drawing"},
-  {name: "Vanessa Sanderson", cohort: :november, age: 18,country: "USA", hobby: "Dancing"},
-  {name: "Ms. Diane Newman", cohort: :april, age: 25,country: "France", hobby: "Stamp Collecting"},
-  {name: "Mrs. Sue Mackenzie", cohort: :february, age: 70,country: "England", hobby: "Origami"},
-  {name: "Mr. Gordon Morrison", cohort: :march, age: 51,country: "England", hobby: "Cooking"},
-  {name: "Max Martin", cohort: :november, age: 33,country: "Scotland", hobby: "Writing"}
-]
-=end
-
 students = try_load_students || []
 loop do
   option = print_menu
