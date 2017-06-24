@@ -15,7 +15,7 @@ def print_body(students)
     print "#{index+1}.".rjust(5/100.0*LINE_WIDTH)
     print "#{student[:name]}".ljust(25/100.0*LINE_WIDTH)
     print "#{student[:cohort].capitalize} cohort".ljust(20/100.0*LINE_WIDTH)
-    print "aged #{student[:age]}".ljust(10/100.0*LINE_WIDTH) unless student[:age].to_s.empty?
+    print "aged #{student[:age]}".ljust(10/100.0*LINE_WIDTH) unless student[:age] == 0
     print "from #{student[:country]}".ljust(20/100.0*LINE_WIDTH) unless student[:country].empty?
     print "loves #{student[:hobby]}".ljust(20/100.0*LINE_WIDTH) unless student[:hobby].empty?
     print "\n"
@@ -33,7 +33,7 @@ def process_students(students,option)
     students = input_students(students)
   when :display_all
     if students.empty?
-        puts "Sorry, no students to display"
+      puts "Sorry, no students to display"
     else
       print_header
       print_body(students)
@@ -88,7 +88,7 @@ def input_students(students)
     country = STDIN.gets.chomp.init_caps
     print "Hobby: "
     hobby = STDIN.gets.chomp.init_caps
-    students << {name: name, cohort: cohort, age: age, country: country, hobby: hobby}
+    students = insert_student(students, name, cohort, age, country, hobby)
     puts "Now we have #{students.count} student#{plural(students.count)}"
     name = STDIN.gets.chomp.init_caps
   end
@@ -108,7 +108,7 @@ def load_students(students,filename=DEFAULT_FILE)
     prev_count = students.count
     file.readlines.each do |line|
       name, cohort, age, country, hobby = line.chomp.split(",")
-      students << {name: name, cohort: cohort.to_sym, age: age, country: country, hobby: hobby}
+      students = insert_student(students, name, cohort.to_sym, age.to_i, country.to_s, hobby.to_s)
     end
     file.close
     file_count = students.count - prev_count
@@ -117,6 +117,10 @@ def load_students(students,filename=DEFAULT_FILE)
     puts "Sorry, #{filename} does not exist"
   end
   students
+end
+
+def insert_student(students, name, cohort, age, country, hobby)
+  students << {name: name, cohort: cohort.to_sym, age: age, country: country, hobby: hobby}
 end
 
 def plural(count)
