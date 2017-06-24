@@ -12,7 +12,7 @@ def print_body(students)
   students.each_with_index do |student,index|
     print "#{index+1}.".rjust(5/100.0*LINE_WIDTH)
     print "#{student[:name]}".ljust(25/100.0*LINE_WIDTH)
-    print "#{student[:cohort]} cohort".ljust(20/100.0*LINE_WIDTH)
+    print "#{student[:cohort].capitalize} cohort".ljust(20/100.0*LINE_WIDTH)
     print "aged #{student[:age]}".ljust(10/100.0*LINE_WIDTH) unless student[:age].to_s.empty?
     print "from #{student[:country]}".ljust(20/100.0*LINE_WIDTH) unless student[:country].empty?
     print "loves #{student[:hobby]}".ljust(20/100.0*LINE_WIDTH) unless student[:hobby].empty?
@@ -61,11 +61,17 @@ def print_menu
   option[STDIN.gets.chomp.to_i]
 end
 
+class String
+  def init_caps
+    self.split.map {|word| word.capitalize}.join(" ")
+  end
+end
+
 def input_students(students)
   puts "Please enter the names of the students"
   puts "To finish, just hit enter twice"
 
-  name = STDIN.gets.chomp
+  name = STDIN.gets.chomp.init_caps
   while !name.empty?
     while true
       print "Cohort: "
@@ -75,14 +81,14 @@ def input_students(students)
       puts "Invalid cohort. Enter a month in full."
     end
     print "Age: "
-    age = STDIN.gets.chomp
+    age = STDIN.gets.chomp.to_i
     print "Country: "
-    country = STDIN.gets.chomp
+    country = STDIN.gets.chomp.init_caps
     print "Hobby: "
-    hobby = STDIN.gets.chomp
+    hobby = STDIN.gets.chomp.init_caps
     students << {name: name, cohort: cohort, age: age, country: country, hobby: hobby}
     puts "Now we have #{students.length} student#{students.length == 1 ? "" : "s"}"
-    name = STDIN.gets.chomp
+    name = STDIN.gets.chomp.init_caps
   end
   students
 end
@@ -91,6 +97,7 @@ def save_students(students,filename="students.csv")
   file = File.open(filename,"w")
   students.each { |student| file.puts [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]].join(",")}
   file.close
+  puts "Saved #{students.count} students to #{filename}"
 end
 
 def load_students(students,filename="students.csv")
@@ -101,6 +108,7 @@ def load_students(students,filename="students.csv")
       students << {name: name, cohort: cohort.to_sym, age: age, country: country, hobby: hobby}
     end
     file.close
+    puts "Loaded #{students.count} students from #{filename}"
   else
     puts "Sorry, #{filename} does not exist"
   end
