@@ -26,12 +26,12 @@ end
 
 def print_footer(count)
   puts ""
-  puts "Overall, we have #{count} great student#{plural(count)}"
+  puts "Overall, we have #{count} great student#{plural(count)}."
 end
 
 def display_students(students)
   if students.empty?
-    puts "Sorry, no students to display"
+    puts "Sorry, no students to display."
   else
     print_header
     print_body(students)
@@ -76,8 +76,8 @@ class String
 end
 
 def input_students(students)
-  puts "Please enter the names of the students"
-  puts "To finish, just hit enter twice"
+  puts "Please enter the names of the students."
+  puts "To finish, just hit enter twice."
 
   name = STDIN.gets.chomp.init_caps
   while !name.empty?
@@ -95,17 +95,21 @@ def input_students(students)
     print "Hobby: "
     hobby = STDIN.gets.chomp.init_caps
     students = insert_student(students, name, cohort, age, country, hobby)
-    puts "Now we have #{students.count} student#{plural(students.count)}"
+    puts "Now we have #{students.count} student#{plural(students.count)}."
     name = STDIN.gets.chomp.init_caps
   end
   students
 end
 
 def save_students(students,filename=DEFAULT_FILE)
-  File.open(filename,"w") do |file|
-    students.each { |student| file.puts [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]].join(",")}
+  begin
+    CSV.open(filename,"w") do |csv|
+      students.each { |student| csv << [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]]}
+    end
+    puts "Saved #{students.count} student#{plural(students.count)} to #{filename}."
+  rescue => exception
+    puts "Sorry, unable to write data to #{filename}. Exception: #{exception.inspect}"
   end
-  puts "Saved #{students.count} student#{plural(students.count)} to #{filename}"
 end
 
 def load_students(students,filename=DEFAULT_FILE)
