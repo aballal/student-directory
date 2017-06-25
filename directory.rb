@@ -1,3 +1,5 @@
+require 'csv'
+
 LINE_WIDTH = 100
 
 COHORT_LIST = [:january,:february,:march,:april,:may,:june,:july,:august,:september,:october,:november,:december]
@@ -107,18 +109,20 @@ def save_students(students,filename=DEFAULT_FILE)
 end
 
 def load_students(students,filename=DEFAULT_FILE)
-  if File.exists?(filename)
+  begin
     prev_count = students.count
-    File.open(filename,"r") do |file|
-      file.readlines.each do |line|
-        name, cohort, age, country, hobby = line.chomp.split(",")
+    CSV.open(filename,"r") do |csv|
+      csv.readlines.each do |line|
+        name, cohort, age, country, hobby = line
         students = insert_student(students, name, cohort.to_sym, age.to_i, country.to_s, hobby.to_s)
       end
     end
     file_count = students.count - prev_count
     puts "#{prev_count == 0 ? "Loaded" : "Added"} #{file_count} student#{plural(file_count)} from #{filename}."
-  else
-    puts "Sorry, #{filename} does not exist"
+  rescue Errno::ENOENT
+    puts "Sorry, #{filename} does not exist."
+  rescue => exception
+    puts "Sorry, unable to load data from #{filename}. Exception: #{exception.inspect}"
   end
   students
 end
@@ -139,7 +143,7 @@ end
 
 def get_filename
   puts "Press enter to use file #{DEFAULT_FILE}. Enter filename otherwise."
-  filename = gets.chomp
+  filename = STDIN.gets.chomp
   filename.empty? ? DEFAULT_FILE : filename
 end
 
