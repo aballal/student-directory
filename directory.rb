@@ -44,9 +44,9 @@ def process_students(students,option)
   when :display_all
     display_students(students)
   when :save
-    save_students(students)
+    save_students(students,get_filename)
   when :load
-    students = load_students(students)
+    students = load_students(students,get_filename)
   else
     puts "Invalid selection, try again."
   end
@@ -135,6 +135,12 @@ def try_load_students
   filename = ARGV.first || DEFAULT_FILE
   return if filename.nil?
   load_students([],filename)
+end
+
+def get_filename
+  puts "Press enter to use file #{DEFAULT_FILE}. Enter filename otherwise."
+  filename = gets.chomp
+  filename.empty? ? DEFAULT_FILE : filename
 end
 
 students = try_load_students || []
