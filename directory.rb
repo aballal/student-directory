@@ -15,9 +15,9 @@ def print_body(students)
     print "#{index+1}.".rjust(5/100.0*LINE_WIDTH)
     print "#{student[:name]}".ljust(25/100.0*LINE_WIDTH)
     print "#{student[:cohort].capitalize} cohort".ljust(20/100.0*LINE_WIDTH)
-    print "aged #{student[:age]}".ljust(10/100.0*LINE_WIDTH) unless student[:age] == 0
-    print "from #{student[:country]}".ljust(20/100.0*LINE_WIDTH) unless student[:country].empty?
-    print "loves #{student[:hobby]}".ljust(20/100.0*LINE_WIDTH) unless student[:hobby].empty?
+    print (student[:age] == 0 ? "" : "aged #{student[:age]}").ljust(10/100.0*LINE_WIDTH)
+    print (student[:country].empty? ? "" : "from #{student[:country]}").ljust(20/100.0*LINE_WIDTH)
+    print (student[:hobby].empty? ? "" : "loves #{student[:hobby]}").ljust(20/100.0*LINE_WIDTH)
     print "\n"
   end
 end
@@ -100,21 +100,21 @@ def input_students(students)
 end
 
 def save_students(students,filename=DEFAULT_FILE)
-  file = File.open(filename,"w")
-  students.each { |student| file.puts [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]].join(",")}
-  file.close
+  File.open(filename,"w") do |file|
+    students.each { |student| file.puts [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]].join(",")}
+  end
   puts "Saved #{students.count} student#{plural(students.count)} to #{filename}"
 end
 
 def load_students(students,filename=DEFAULT_FILE)
   if File.exists?(filename)
-    file = File.open(filename,"r")
     prev_count = students.count
-    file.readlines.each do |line|
-      name, cohort, age, country, hobby = line.chomp.split(",")
-      students = insert_student(students, name, cohort.to_sym, age.to_i, country.to_s, hobby.to_s)
+    File.open(filename,"r") do |file|
+      file.readlines.each do |line|
+        name, cohort, age, country, hobby = line.chomp.split(",")
+        students = insert_student(students, name, cohort.to_sym, age.to_i, country.to_s, hobby.to_s)
+      end
     end
-    file.close
     file_count = students.count - prev_count
     puts "#{prev_count == 0 ? "Loaded" : "Added"} #{file_count} student#{plural(file_count)} from #{filename}."
   else
@@ -124,7 +124,7 @@ def load_students(students,filename=DEFAULT_FILE)
 end
 
 def insert_student(students, name, cohort, age, country, hobby)
-  students << {name: name, cohort: cohort.to_sym, age: age, country: country, hobby: hobby}
+  students << {name: name, cohort: cohort, age: age, country: country, hobby: hobby}
 end
 
 def plural(count)
