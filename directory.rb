@@ -24,7 +24,17 @@ end
 
 def print_footer(count)
   puts ""
-  puts "Overall, we have #{count} great student#{count == 1 ? "" : "s"}"
+  puts "Overall, we have #{count} great student#{plural(count)}"
+end
+
+def display_students(students)
+  if students.empty?
+    puts "Sorry, no students to display"
+  else
+    print_header
+    print_body(students)
+    print_footer(students.count)
+  end
 end
 
 def process_students(students,option)
@@ -32,13 +42,7 @@ def process_students(students,option)
   when :input
     students = input_students(students)
   when :display_all
-    if students.empty?
-      puts "Sorry, no students to display"
-    else
-      print_header
-      print_body(students)
-      print_footer(students.count)
-    end
+    display_students(students)
   when :save
     save_students(students)
   when :load
@@ -99,7 +103,7 @@ def save_students(students,filename=DEFAULT_FILE)
   file = File.open(filename,"w")
   students.each { |student| file.puts [student[:name],student[:cohort],student[:age],student[:country],student[:hobby]].join(",")}
   file.close
-  puts "Saved #{students.count} students to #{filename}"
+  puts "Saved #{students.count} student#{plural(students.count)} to #{filename}"
 end
 
 def load_students(students,filename=DEFAULT_FILE)
