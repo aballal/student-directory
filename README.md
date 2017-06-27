@@ -24,7 +24,8 @@ The program accepts the following fields for each student
   * age - optional
   * country - optional
   * hobby - optional
-The details are accepted repeatedly until a blank name is entered. Any data that has been input and not saved will be lost.
+
+  The details are accepted repeatedly until a blank name is entered. Any data that has been input and not saved will be lost.
 
 ### Display students ###
 The program displays all data for the current set of students which could be loaded from a file, input from terminal, or both.
